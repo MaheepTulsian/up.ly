@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
-import Sidebar from '../components/Sidebar';
+// import Navbar from '../components/Navbar';
+// import Sidebar from '../components/Sidebar';
 import Personal from '../components/profile/Personal';
 import Academics from '../components/profile/Academics';
 import Projects from '../components/profile/Projects';
@@ -20,7 +20,7 @@ function Dashboard() {
     certifications: null
   });
 
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  // const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const handleNextStep = (formType, data) => {
     if (data) {
@@ -58,9 +58,11 @@ function Dashboard() {
     }));
   };
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  // const toggleSidebar = () => {
+  //   setSidebarOpen(!sidebarOpen);
+  // };
+
+
 
   const steps = [
     { name: 'Personal', component: <Personal onNext={(data) => handleNextStep('personal', data)} /> },
@@ -72,16 +74,16 @@ function Dashboard() {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {sidebarOpen && (
-        <Sidebar activeStep={activeStep} steps={steps} onStepClick={handleStepClick} />
-      )}
+    // <div className="flex h-screen bg-white">
+    //   {sidebarOpen && (
+    //     <Sidebar />
+    //   )}
       
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <Navbar toggleSidebar={toggleSidebar} />
+    //   <div className="flex flex-col flex-1 overflow-hidden">
+    //     <Navbar toggleSidebar={toggleSidebar} />
         
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200 p-4">
-          <div className="flex mb-4">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-white p-4">
+          {/* <div className="flex mb-4">
             {!sidebarOpen && (
               <button 
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -89,10 +91,10 @@ function Dashboard() {
               >
                 Menu
               </button>
-            )}
-          </div>
+            )} 
+          </div> */}
           
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white ">
             <div className="mb-6">
               {/* Dots style stepper */}
               <div className="flex justify-center items-center">
@@ -128,10 +130,13 @@ function Dashboard() {
             {steps[activeStep].component}
           </div>
         </main>
-      </div>
-    </div>
+    //   </div>
+    // </div>
   );
 }
 
 export default Dashboard;
+
+
+
 
