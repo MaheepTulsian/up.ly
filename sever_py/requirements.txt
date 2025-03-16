@@ -1,9 +1,8 @@
 fastapi
 langchain
 langchain-core
-langchain-blp
 langchain-openai
 langchain-community
-langcgraph
+langgraph
 langserve[all]
 langchain-cli
