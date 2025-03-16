@@ -70,26 +70,54 @@ def extract_json_from_text(text: str) -> Dict[str, Any]:
         return {}
 
 def get_llm(provider="groq", model=None):
-    
+    """Get the language model based on provider."""
     if provider == "groq":
-        
         return ChatGroq(
-            model = model or "groq-ai/groq-turbo",
+            model = model or "llama-3.3-70b-versatile",
             temperature=0.2,
             max_retries = 2
         )
+    elif provider.lower().startswith("llama"):
+        # Try Ollama first
+        try:
+            from langchain_ollama import Ollama
+            llama_model = model or "llama3.1"
+            return Ollama(model=llama_model, temperature=0.2)
+        except (ImportError, Exception) as e:
+            print(f"Ollama initialization failed: {e}")
         
-        # return ChatOpenAI(
-        #     model_name=model or "gpt-4-turbo",
-        #     temperature=0.2
-        # )
+        # Try Hugging Face as fallback
+        try:
+            from langchain_huggingface import HuggingFacePipeline
+            import transformers
+            import torch
+            
+            hf_model = model or "meta-llama/Llama-3.1-8B"
+            pipeline = transformers.pipeline(
+                "text-generation",
+                model=hf_model,
+                model_kwargs={"torch_dtype": torch.bfloat16},
+                device_map="auto"
+            )
+            return HuggingFacePipeline(pipeline=pipeline)
+        except (ImportError, Exception) as e:
+            print(f"Hugging Face initialization failed: {e}")
+            
+        # If all attempts fail, try using a different provider
+        print(f"Could not initialize Llama model. Falling back to Groq.")
+        return ChatGroq(
+            model="llama-3.3-70b-versatile",
+            temperature=0.2,
+            max_retries=2
+        )
     else:
         raise ValueError(f"Unsupported provider: {provider}")
 
 
+
 def analyze_job(state: ResumeBuilderState) -> Dict:
     """Analyze the job description and identify key requirements."""
-    llm = get_llm("llama-3.1-8b-instant")
+    llm = get_llm()
     
     messages = [
         SystemMessage(content=SYSTEM_PROMPT),
@@ -111,7 +139,7 @@ def analyze_job(state: ResumeBuilderState) -> Dict:
 
 def review_profile(state: ResumeBuilderState) -> Dict:
     """Review the user profile and match it with job requirements."""
-    llm = get_llm("llama-3.1-8b-instant")
+    llm = get_llm()
     
     # Get the previous analysis from the messages
     previous_messages = state["messages"]
@@ -137,7 +165,7 @@ def review_profile(state: ResumeBuilderState) -> Dict:
 
 def generate_resume(state: ResumeBuilderState) -> Dict:
     """Generate the resume in JSON format according to the template."""
-    llm = get_llm("llama-3.1-8b-instant")
+    llm = get_llm()
     
     template_str = json.dumps(state["resume_template"], indent=2)
     
@@ -191,7 +219,7 @@ def generate_resume(state: ResumeBuilderState) -> Dict:
 
 def handle_error(state: ResumeBuilderState) -> Dict:
     """Handle errors in the resume generation process."""
-    llm = get_llm("llama-3.1-8b-instant")
+    llm = get_llm()
     
     template_str = json.dumps(state["resume_template"], indent=2)
     

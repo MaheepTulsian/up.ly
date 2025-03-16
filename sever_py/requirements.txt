@@ -4,5 +4,8 @@ langchain-core
 langchain-openai
 langchain-community
 langgraph
-langserve[all]
 langchain-cli
+langchain_groq
+dotenv
+langchain_huggingface
+langchain_ollama
