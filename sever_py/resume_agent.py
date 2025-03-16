@@ -8,13 +8,13 @@ from dotenv import load_dotenv
 # LangChain imports
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage, BaseMessage
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
-from langchain_groq import ChatGROQ
+# from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
 
 
-
+from langgraph.graph import StateGraph, START, END
 # LangGraph imports
-from langgraph.graph import StateGraph, END
+# from langgraph.graph import StateGraph, END
 
 # Load environment variables
 load_dotenv()
@@ -73,7 +73,7 @@ def get_llm(provider="groq", model=None):
     
     if provider == "groq":
         
-        return ChatGROQ(
+        return ChatGroq(
             model = model or "groq-ai/groq-turbo",
             temperature=0.2,
             max_retries = 2
