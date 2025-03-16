@@ -1,1 +1,10 @@
 @import "tailwindcss";
+@plugin "daisyui";
+
+input {
+  color: black;  
+}
+
+textarea {
+  color : black;
+}
