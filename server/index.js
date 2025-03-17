@@ -3,34 +3,35 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import connectdb from "./database/connect.js";
+import authRoutes from "./routes/auth_route.js";
+import profileRoutes from "./routes/profile_route.js";
 
-const app = express();
 dotenv.config();
+const app = express();
 const Port = 8000;
 
-//cors middleware
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
+// CORS middleware
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
-//connect to database
+// Connect to database
 connectdb();
 
-//regular express middleware
+// Regular Express middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//cookie parser middleware
+// Cookie parser middleware
 app.use(cookieParser());
 
-
+// Default route
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+// Register routes
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1", profileRoutes);
+
 app.listen(Port, () => {
-  console.log(`⚙️Server is running on http://localhost:${Port}`);
+  console.log(`⚙️ Server is running on http://localhost:${Port}`);
 });
