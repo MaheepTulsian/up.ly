@@ -1,8 +1,11 @@
 import React from 'react'
+import Layout from './Layout'
 
 function Landing() {
   return (
-    <div>Landing</div>
+    <div>
+      <Layout />
+    </div>
   )
 }
 
