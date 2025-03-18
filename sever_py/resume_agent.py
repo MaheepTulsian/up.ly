@@ -48,8 +48,8 @@ Remember, the goal is to create a resume that will help the user stand out while
 """
 
 def extract_json_from_text(text: str) -> Dict[str, Any]:
-    """Extract JSON object from text."""
-    # Find content between triple backticks if present
+    """Extract JSON object from text with improved error handling."""
+    # Find content between triple backticks
     json_match = re.search(r"``````", text)
     if json_match:
         json_str = json_match.group(1)
@@ -62,57 +62,96 @@ def extract_json_from_text(text: str) -> Dict[str, Any]:
             # If still no match, use the whole text
             json_str = text
     
+    # Clean up common JSON formatting errors
+    json_str = re.sub(r',(\s*[\]}])', r'\1', json_str)  # Remove trailing commas
+    
     try:
         # Try to parse the JSON
         return json.loads(json_str)
-    except json.JSONDecodeError:
-        # If parsing fails, return empty dict
-        return {}
+    except json.JSONDecodeError as e:
+        print(f"JSON decode error: {e}")
+        try:
+            # Try using a more lenient JSON parser as fallback
+            import json5
+            return json5.loads(json_str)
+        except:
+            # If all parsing fails, return empty dict
+            return {}
 
 def get_llm(provider="groq", model=None):
     """Get the language model based on provider."""
-    if provider == "groq":
-        return ChatGroq(
+    # if provider == "groq":
+    return ChatGroq(
             model = model or "llama-3.3-70b-versatile",
             temperature=0.2,
             max_retries = 2
         )
-    elif provider.lower().startswith("llama"):
-        # Try Ollama first
-        try:
-            from langchain_ollama import Ollama
-            llama_model = model or "llama3.1"
-            return Ollama(model=llama_model, temperature=0.2)
-        except (ImportError, Exception) as e:
-            print(f"Ollama initialization failed: {e}")
+    # elif provider.lower().startswith("llama"):
+    #     # Try Ollama first
+    #     try:
+    #         from langchain_ollama import Ollama
+    #         llama_model = model or "llama3.1"
+    #         return Ollama(model=llama_model, temperature=0.2)
+    #     except (ImportError, Exception) as e:
+    #         print(f"Ollama initialization failed: {e}")
         
-        # Try Hugging Face as fallback
-        try:
-            from langchain_huggingface import HuggingFacePipeline
-            import transformers
-            import torch
+    #     # Try Hugging Face as fallback
+    #     try:
+    #         from langchain_huggingface import HuggingFacePipeline
+    #         import transformers
+    #         import torch
             
-            hf_model = model or "meta-llama/Llama-3.1-8B"
-            pipeline = transformers.pipeline(
-                "text-generation",
-                model=hf_model,
-                model_kwargs={"torch_dtype": torch.bfloat16},
-                device_map="auto"
-            )
-            return HuggingFacePipeline(pipeline=pipeline)
-        except (ImportError, Exception) as e:
-            print(f"Hugging Face initialization failed: {e}")
+    #         hf_model = model or "meta-llama/Llama-3.1-8B"
+    #         pipeline = transformers.pipeline(
+    #             "text-generation",
+    #             model=hf_model,
+    #             model_kwargs={"torch_dtype": torch.bfloat16},
+    #             device_map="auto"
+    #         )
+    #         return HuggingFacePipeline(pipeline=pipeline)
+    #     except (ImportError, Exception) as e:
+    #         print(f"Hugging Face initialization failed: {e}")
             
-        # If all attempts fail, try using a different provider
-        print(f"Could not initialize Llama model. Falling back to Groq.")
-        return ChatGroq(
-            model="llama-3.3-70b-versatile",
-            temperature=0.2,
-            max_retries=2
-        )
-    else:
-        raise ValueError(f"Unsupported provider: {provider}")
+    #     # If all attempts fail, try using a different provider
+    #     print(f"Could not initialize Llama model. Falling back to Groq.")
+    #     return ChatGroq(
+    #         model="llama-3.3-70b-versatile",
+    #         temperature=0.2,
+    #         max_retries=2
+    #     )
+    # else:
+    #     raise ValueError(f"Unsupported provider: {provider}")
 
+def validate_json_structure(json_data: Dict[str, Any], template: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Validate and fix JSON structure against the template.
+    Handles duplicate keys by keeping only the most complete version.
+    """
+    result = {}
+    
+    # Process each key in the template
+    for key, value in template.items():
+        if key not in json_data:
+            # If key is missing in the generated JSON, use template value
+            result[key] = value
+        elif isinstance(value, list) and isinstance(json_data[key], list):
+            # Handle list values (like certifications)
+            result[key] = []
+            for item in json_data[key]:
+                if isinstance(item, dict):
+                    # Validate each item against the template item
+                    template_item = value[0] if len(value) > 0 else {}
+                    valid_item = {k: item.get(k, v) for k, v in template_item.items()}
+                    if any(v for v in valid_item.values()):  # Only add non-empty items
+                        result[key].append(valid_item)
+        elif isinstance(value, dict) and isinstance(json_data[key], dict):
+            # Handle nested dictionaries
+            result[key] = {k: json_data[key].get(k, v) for k, v in value.items()}
+        else:
+            # For simple values, use the generated value
+            result[key] = json_data[key]
+            
+    return result
 
 
 def analyze_job(state: ResumeBuilderState) -> Dict:
@@ -165,7 +204,7 @@ def review_profile(state: ResumeBuilderState) -> Dict:
 
 def generate_resume(state: ResumeBuilderState) -> Dict:
     """Generate the resume in JSON format according to the template."""
-    llm = get_llm()
+    llm = get_llm("llama-3.1-8b-instant")  # Consider using "groq" instead if Llama has JSON issues
     
     template_str = json.dumps(state["resume_template"], indent=2)
     
@@ -182,8 +221,10 @@ def generate_resume(state: ResumeBuilderState) -> Dict:
         1. The output must be valid JSON that matches the EXACT structure of the template.
         2. Include only the JSON object in your response, formatted with triple backticks.
         3. All fields in the template must be present in your output.
-        4. Focus on highlighting experiences and skills most relevant to the job description.
-        5. Your output should look like this:
+        4. Each section like "certifications" should appear EXACTLY ONCE in the output.
+        5. Focus on highlighting experiences and skills most relevant to the job description.
+        6. Make sure all brackets and braces are properly closed and balanced.
+        7. Your output should look like this:
         
         ```
         {{
@@ -197,15 +238,18 @@ def generate_resume(state: ResumeBuilderState) -> Dict:
     
     response = llm.invoke(messages)
     
-    # Extract JSON from the response
+    # Extract and validate JSON
     try:
-        resume_json = extract_json_from_text(response.content)
+        raw_json = extract_json_from_text(response.content)
         
-        if not resume_json:
+        if not raw_json:
             return {
                 "messages": state["messages"] + [messages[-1], response],
                 "error": "Failed to extract valid JSON from the response."
             }
+        
+        # Validate and fix JSON structure against the template
+        resume_json = validate_json_structure(raw_json, state["resume_template"])
         
         return {
             "messages": state["messages"] + [messages[-1], response],
@@ -264,6 +308,10 @@ def handle_error(state: ResumeBuilderState) -> Dict:
             "messages": state["messages"] + [messages[-1], response],
             "error": f"Error processing resume: {str(e)}"
         }
+        
+        
+        
+        
 def check_error_condition(state: ResumeBuilderState) -> str:
     """Check if there's an error that needs handling."""
     if state.get("error", ""):

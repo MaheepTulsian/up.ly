@@ -9,3 +9,7 @@ langchain_groq
 dotenv
 langchain_huggingface
 langchain_ollama
+uvicorn[standard]==0.22.0
+json5
+pydantic
+pydantic-settings
