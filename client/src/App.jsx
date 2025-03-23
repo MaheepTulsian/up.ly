@@ -7,6 +7,7 @@ import Auth from './pages/AuthPage';
 import Dashboard from './pages/Dashboard';
 import ProfilePage from './pages/ProfilePage';
 import ResumePage from './pages/ResumePage';
+import ResourcesPage from './pages/ResourcesPage';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/:id/dashboard/" element={<Dashboard />} >
             <Route path="profile" element={<ProfilePage />} />
             <Route path="resume" element={<ResumePage />} />
+            <Route path="resources" element={<ResourcesPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

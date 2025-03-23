@@ -1,0 +1,261 @@
+{
+  "topics": [
+    {
+      "id": 1,
+      "name": "Arrays & Strings",
+      "subtopics": [
+        "Two Pointer Technique",
+        "Sliding Window",
+        "Prefix Sums",
+        "Kadane's Algorithm",
+        "String Manipulation",
+        "Frequency Counting",
+        "Dutch National Flag Algorithm"
+      ],
+      "resources": [
+        "https://leetcode.com/explore/learn/card/array-and-string/",
+        "https://www.geeksforgeeks.org/sliding-window-technique/"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Linked Lists",
+      "subtopics": [
+        "Fast & Slow Pointers",
+        "Floyd's Cycle Detection",
+        "Reversing Lists",
+        "Merge Operations",
+        "Doubly Linked Lists",
+        "Dummy Head Technique"
+      ],
+      "resources": [
+        "https://leetcode.com/explore/learn/card/linked-list/",
+        "https://www.hackerearth.com/practice/data-structures/linked-list/1-d/tutorial/"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Trees & Graphs",
+      "subtopics": [
+        "DFS & BFS Traversals",
+        "Recursion Techniques",
+        "Tree Construction",
+        "Path Finding",
+        "Topological Sorting",
+        "Minimum Spanning Tree",
+        "Trie Data Structure"
+      ],
+      "resources": [
+        "https://leetcode.com/explore/learn/card/data-structure-tree/",
+        "https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Dynamic Programming",
+      "subtopics": [
+        "Memoization",
+        "Tabulation",
+        "Knapsack Problems",
+        "LCS & Edit Distance",
+        "Coin Change Problems",
+        "Matrix Chain Multiplication",
+        "DP on Trees & Graphs"
+      ],
+      "resources": [
+        "https://leetcode.com/discuss/general-discussion/458695/dynamic-programming-patterns",
+        "https://www.educative.io/courses/grokking-dynamic-programming-patterns-for-coding-interviews"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "System Design",
+      "subtopics": [
+        "Scalability Principles",
+        "Database Sharding",
+        "Load Balancing",
+        "Caching Strategies",
+        "Microservices Architecture",
+        "API Design",
+        "Distributed Systems"
+      ],
+      "resources": [
+        "https://github.com/donnemartin/system-design-primer",
+        "https://www.educative.io/courses/grokking-the-system-design-interview"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Frontend Development",
+      "subtopics": [
+        "React Component Patterns",
+        "State Management",
+        "Performance Optimization",
+        "CSS Architecture",
+        "Responsive Design",
+        "Accessibility",
+        "Testing React Applications"
+      ],
+      "resources": [
+        "https://reactjs.org/docs/getting-started.html",
+        "https://kentcdodds.com/blog/advanced-react-patterns"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Backend Development",
+      "subtopics": [
+        "RESTful API Design",
+        "Authentication & Authorization",
+        "Database Indexing",
+        "Query Optimization",
+        "Caching Techniques",
+        "Error Handling",
+        "Websockets & Real-time Communication"
+      ],
+      "resources": [
+        "https://github.com/goldbergyoni/nodebestpractices",
+        "https://12factor.net/"
+      ]
+    }
+  ],
+  "dsaQuestions": [
+    {
+      "id": 1,
+      "title": "Two Sum",
+      "leetcodeId": 1,
+      "leetcodeLink": "https://leetcode.com/problems/two-sum/",
+      "difficulty": "Easy",
+      "description": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.",
+      "tags": ["Array", "Hash Table"],
+      "companies": ["Amazon", "Google", "Facebook"],
+      "solution": "Use a hash map to store value-to-index mapping. For each element, check if (target - current) exists in the hash map."
+    },
+    {
+      "id": 2,
+      "title": "Valid Parentheses",
+      "leetcodeId": 20,
+      "leetcodeLink": "https://leetcode.com/problems/valid-parentheses/",
+      "difficulty": "Easy",
+      "description": "Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.",
+      "tags": ["Stack", "String"],
+      "companies": ["Amazon", "Microsoft", "Facebook"],
+      "solution": "Use a stack to track opening brackets. When encountering a closing bracket, check if it matches the top of the stack."
+    },
+    {
+      "id": 3,
+      "title": "Merge Two Sorted Lists",
+      "leetcodeId": 21,
+      "leetcodeLink": "https://leetcode.com/problems/merge-two-sorted-lists/",
+      "difficulty": "Easy",
+      "description": "Merge two sorted linked lists and return it as a sorted list.",
+      "tags": ["Linked List", "Recursion"],
+      "companies": ["Amazon", "Apple", "Microsoft"],
+      "solution": "Use a dummy head and maintain a tail pointer. Compare nodes from both lists and attach the smaller one to the tail."
+    },
+    {
+      "id": 4,
+      "title": "Maximum Subarray",
+      "leetcodeId": 53,
+      "leetcodeLink": "https://leetcode.com/problems/maximum-subarray/",
+      "difficulty": "Medium",
+      "description": "Given an integer array nums, find the contiguous subarray which has the largest sum and return its sum.",
+      "tags": ["Array", "Dynamic Programming", "Divide and Conquer", "Kadane's Algorithm"],
+      "companies": ["Amazon", "Microsoft", "Apple"],
+      "solution": "Use Kadane's algorithm. For each element, decide whether to start a new subarray or extend the current one based on current sum."
+    },
+    {
+      "id": 5,
+      "title": "Longest Palindromic Substring",
+      "leetcodeId": 5,
+      "leetcodeLink": "https://leetcode.com/problems/longest-palindromic-substring/",
+      "difficulty": "Medium",
+      "description": "Given a string s, return the longest palindromic substring in s.",
+      "tags": ["String", "Dynamic Programming"],
+      "companies": ["Amazon", "Microsoft", "Google"],
+      "solution": "Expand around centers. For each position, expand both odd and even length palindromes and track the longest one found."
+    },
+    {
+      "id": 6,
+      "title": "LRU Cache",
+      "leetcodeId": 146,
+      "leetcodeLink": "https://leetcode.com/problems/lru-cache/",
+      "difficulty": "Medium",
+      "description": "Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.",
+      "tags": ["Hash Table", "Linked List", "Design"],
+      "companies": ["Amazon", "Microsoft", "Facebook", "Google"],
+      "solution": "Use a doubly linked list to maintain order and a hash map for O(1) lookups. Move accessed nodes to front of list."
+    },
+    {
+      "id": 7,
+      "title": "Trapping Rain Water",
+      "leetcodeId": 42,
+      "leetcodeLink": "https://leetcode.com/problems/trapping-rain-water/",
+      "difficulty": "Hard",
+      "description": "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.",
+      "tags": ["Array", "Two Pointers", "Stack", "Dynamic Programming"],
+      "companies": ["Amazon", "Google", "Facebook"],
+      "solution": "Use two pointers from both ends. The water trapped depends on the minimum of left and right boundaries minus height at current position."
+    },
+    {
+      "id": 8,
+      "title": "Merge k Sorted Lists",
+      "leetcodeId": 23,
+      "leetcodeLink": "https://leetcode.com/problems/merge-k-sorted-lists/",
+      "difficulty": "Hard",
+      "description": "You are given an array of k linked-lists lists, each linked-list is sorted in ascending order. Merge all the linked-lists into one sorted linked-list and return it.",
+      "tags": ["Linked List", "Divide and Conquer", "Heap"],
+      "companies": ["Amazon", "Facebook", "Google"],
+      "solution": "Use a min-heap to keep track of the smallest node from each list. Extract the min and add its next node to the heap if it exists."
+    },
+    {
+      "id": 9,
+      "title": "Word Search II",
+      "leetcodeId": 212,
+      "leetcodeLink": "https://leetcode.com/problems/word-search-ii/",
+      "difficulty": "Hard",
+      "description": "Given an m x n board of characters and a list of strings words, return all words on the board.",
+      "tags": ["Backtracking", "Trie"],
+      "companies": ["Amazon", "Microsoft", "Google"],
+      "solution": "Build a Trie with all words. Then perform backtracking DFS from each cell, using the Trie to prune search paths efficiently."
+    },
+    {
+      "id": 10,
+      "title": "Design Twitter",
+      "leetcodeId": 355,
+      "leetcodeLink": "https://leetcode.com/problems/design-twitter/",
+      "difficulty": "Medium",
+      "description": "Design a simplified version of Twitter where users can post tweets, follow/unfollow another user, and see the 10 most recent tweets in the user's news feed.",
+      "tags": ["Hash Table", "Heap", "Design"],
+      "companies": ["Twitter", "Facebook", "Amazon"],
+      "solution": "Use hash maps to store followers and tweets. Implement a max-heap to efficiently retrieve the most recent tweets from all followed users."
+    }
+  ],
+  "jobRoles": [
+    {
+      "title": "Frontend Developer",
+      "recommendedTopics": [1, 4, 6],
+      "recommendedQuestions": [1, 2, 4, 5, 6]
+    },
+    {
+      "title": "Backend Developer",
+      "recommendedTopics": [1, 2, 3, 7],
+      "recommendedQuestions": [1, 2, 4, 6, 7, 10]
+    },
+    {
+      "title": "Full Stack Developer",
+      "recommendedTopics": [1, 3, 4, 6, 7],
+      "recommendedQuestions": [1, 2, 3, 4, 5, 6]
+    },
+    {
+      "title": "Data Scientist",
+      "recommendedTopics": [1, 4],
+      "recommendedQuestions": [1, 4, 7, 8]
+    },
+    {
+      "title": "Software Engineer",
+      "recommendedTopics": [1, 2, 3, 4, 5],
+      "recommendedQuestions": [1, 2, 3, 4, 6, 7, 8, 9]
+    }
+  ]
+} 
