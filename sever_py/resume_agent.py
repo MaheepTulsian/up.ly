@@ -4,6 +4,7 @@ import re
 from typing import TypedDict, Annotated, List, Dict, Any
 import operator
 from dotenv import load_dotenv
+import datetime
 
 # LangChain imports
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage, BaseMessage
@@ -86,41 +87,7 @@ def get_llm(provider="groq", model=None):
             temperature=0.2,
             max_retries = 2
         )
-    # elif provider.lower().startswith("llama"):
-    #     # Try Ollama first
-    #     try:
-    #         from langchain_ollama import Ollama
-    #         llama_model = model or "llama3.1"
-    #         return Ollama(model=llama_model, temperature=0.2)
-    #     except (ImportError, Exception) as e:
-    #         print(f"Ollama initialization failed: {e}")
-        
-    #     # Try Hugging Face as fallback
-    #     try:
-    #         from langchain_huggingface import HuggingFacePipeline
-    #         import transformers
-    #         import torch
-            
-    #         hf_model = model or "meta-llama/Llama-3.1-8B"
-    #         pipeline = transformers.pipeline(
-    #             "text-generation",
-    #             model=hf_model,
-    #             model_kwargs={"torch_dtype": torch.bfloat16},
-    #             device_map="auto"
-    #         )
-    #         return HuggingFacePipeline(pipeline=pipeline)
-    #     except (ImportError, Exception) as e:
-    #         print(f"Hugging Face initialization failed: {e}")
-            
-    #     # If all attempts fail, try using a different provider
-    #     print(f"Could not initialize Llama model. Falling back to Groq.")
-    #     return ChatGroq(
-    #         model="llama-3.3-70b-versatile",
-    #         temperature=0.2,
-    #         max_retries=2
-    #     )
-    # else:
-    #     raise ValueError(f"Unsupported provider: {provider}")
+  
 
 def validate_json_structure(json_data: Dict[str, Any], template: Dict[str, Any]) -> Dict[str, Any]:
     """
