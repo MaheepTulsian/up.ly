@@ -11,10 +11,8 @@ const InterviewPage = () => {
     // Audio recording refs
     const recorderRef = useRef(null);
     const streamRef = useRef(null);
-    const audioContextRef = useRef(null);
-    const analyserRef = useRef(null);
-    const dataArrayRef = useRef(null);
-    const silenceTimerRef = useRef(null);
+    const inactivityTimerRef = useRef(null);
+    const lastActivityRef = useRef(null);
 
     useEffect(() => {
         // Request camera access when component mounts
@@ -63,15 +61,7 @@ const InterviewPage = () => {
         try {
             // Get audio stream
             streamRef.current = await navigator.mediaDevices.getUserMedia({ audio: true });
-            audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-            const microphone = audioContextRef.current.createMediaStreamSource(streamRef.current);
-
-            // Create an analyser node
-            analyserRef.current = audioContextRef.current.createAnalyser();
-            analyserRef.current.fftSize = 512;
-            dataArrayRef.current = new Uint8Array(analyserRef.current.frequencyBinCount);
-            microphone.connect(analyserRef.current);
-
+            
             // Start recording
             recorderRef.current = new RecordRTC(streamRef.current, {
                 type: 'audio',
@@ -84,43 +74,48 @@ const InterviewPage = () => {
             setIsRecording(true);
             console.log("Recording started...");
 
-            // Monitor silence
-            checkSilence();
+            // Initialize last activity time
+            lastActivityRef.current = Date.now();
+            
+            // Start monitoring for inactivity
+            startInactivityTimer();
         } catch (err) {
             console.error("Error setting up audio recording:", err);
             throw err;
         }
     };
 
-    const checkSilence = () => {
-        if (!analyserRef.current || !dataArrayRef.current || !recorderRef.current) return;
+    const startInactivityTimer = () => {
+        // Clear any existing timer
+        if (inactivityTimerRef.current) {
+            clearTimeout(inactivityTimerRef.current);
+        }
 
-        analyserRef.current.getByteFrequencyData(dataArrayRef.current);
-        let volume = dataArrayRef.current.reduce((sum, val) => sum + val, 0) / dataArrayRef.current.length;
+        // Set up new timer to check every 5 seconds
+        inactivityTimerRef.current = setInterval(() => {
+            const now = Date.now();
+            const timeSinceLastActivity = now - lastActivityRef.current;
 
-        if (volume < 10) { // Silence threshold (adjust as needed)
-            if (!silenceTimerRef.current) {
-                silenceTimerRef.current = setTimeout(() => {
-                    if (isMicOn && recorderRef.current) {
-                        stopRecording();
-                        setIsMicOn(false);
-                    }
-                }, 2000); // Stop after 2 sec silence
+            // If no activity for 10 seconds, stop recording
+            if (timeSinceLastActivity > 10000) {
+                if (isMicOn && recorderRef.current) {
+                    stopRecording();
+                    setIsMicOn(false);
+                }
             }
-        } else {
-            clearTimeout(silenceTimerRef.current);
-            silenceTimerRef.current = null;
-        }
-
-        if (isMicOn && recorderRef.current) {
-            requestAnimationFrame(checkSilence);
-        }
+        }, 5000);
     };
 
     const stopRecording = () => {
         if (!recorderRef.current) return;
         
         console.log("Stopping recording...");
+        
+        // Clear inactivity timer
+        if (inactivityTimerRef.current) {
+            clearInterval(inactivityTimerRef.current);
+            inactivityTimerRef.current = null;
+        }
         
         recorderRef.current.stopRecording(() => {
             let blob = recorderRef.current.getBlob();
@@ -141,17 +136,10 @@ const InterviewPage = () => {
             if (streamRef.current) {
                 streamRef.current.getTracks().forEach(track => track.stop());
             }
-            if (audioContextRef.current) {
-                audioContextRef.current.close();
-            }
             
             recorderRef.current = null;
             streamRef.current = null;
-            audioContextRef.current = null;
-            analyserRef.current = null;
-            dataArrayRef.current = null;
-            clearTimeout(silenceTimerRef.current);
-            silenceTimerRef.current = null;
+            lastActivityRef.current = null;
             
             setIsRecording(false);
         });
@@ -191,6 +179,41 @@ const InterviewPage = () => {
             videoRef.current.srcObject = null;
         }
     };
+
+    // Update last activity time when user speaks
+    const updateLastActivity = () => {
+        if (isMicOn && lastActivityRef.current) {
+            lastActivityRef.current = Date.now();
+        }
+    };
+
+    // Add event listener for audio input
+    useEffect(() => {
+        if (isMicOn && streamRef.current) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const source = audioContext.createMediaStreamSource(streamRef.current);
+            const analyser = audioContext.createAnalyser();
+            analyser.fftSize = 512;
+            source.connect(analyser);
+
+            const checkAudioLevel = () => {
+                const dataArray = new Uint8Array(analyser.frequencyBinCount);
+                analyser.getByteFrequencyData(dataArray);
+                const volume = dataArray.reduce((sum, val) => sum + val, 0) / dataArray.length;
+
+                // If volume is above threshold, update last activity
+                if (volume > 10) {
+                    updateLastActivity();
+                }
+
+                if (isMicOn) {
+                    requestAnimationFrame(checkAudioLevel);
+                }
+            };
+
+            checkAudioLevel();
+        }
+    }, [isMicOn]);
 
     return (
         <div className="flex flex-col h-full bg-gray-900 overflow-hidden">

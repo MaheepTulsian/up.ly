@@ -1,0 +1,652 @@
+/* Scope all styles to prevent affecting other pages */
+.landing-page {
+    /* Original body styles */
+    background-color: #141414;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    cursor: none; /* Hide default cursor */
+    min-height: 100vh;
+}
+
+/* Custom Cursor Styles - still need to be global */
+.landing-page .cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease;
+}
+
+.landing-page .cursor-ring {
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+/* Cursor hover effects */
+.landing-page a:hover ~ .cursor-ring,
+.landing-page button:hover ~ .cursor-ring,
+.landing-page .nav-cta-button:hover ~ .cursor-ring,
+.landing-page .end-text-2:hover ~ .cursor-ring {
+    transform: scale(1.5);
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Hide cursor on mobile devices */
+@media (max-width: 768px) {
+    .landing-page .cursor-dot,
+    .landing-page .cursor-ring {
+        display: none;
+    }
+    .landing-page {
+        cursor: auto;
+    }
+}
+
+.landing-page * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.landing-page .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+}
+
+.landing-page .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+.landing-page .nav-logo img {
+    height: 60px;
+    width: auto;
+}
+
+.landing-page .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.landing-page .nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: opacity 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+.landing-page .nav-links a:hover {
+    opacity: 0.8;
+}
+
+.landing-page .nav-cta-button {
+    width: 150px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    scale: 1.3;
+}
+
+.landing-page .nav-cta-button:hover {
+    transform: scale(1.05);
+}
+
+.landing-page .hero-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #250f3f 0%, #1a3445 100%);
+    overflow: hidden;
+}
+
+.landing-page .nebula-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.landing-page .nebula-spot {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    animation: landingPageFloat 20s infinite ease-in-out;
+}
+
+.landing-page .spot-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle at center, #3a5b7c, #264859);
+    top: -100px;
+    left: -100px;
+    animation-delay: 0s;
+}
+
+.landing-page .spot-2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle at center, #2a4a6a, #1a2f3d);
+    bottom: -50px;
+    right: -50px;
+    animation-delay: -5s;
+}
+
+.landing-page .spot-3 {
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle at center, #2a3a5a, #264859);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation-delay: -10s;
+}
+
+.landing-page .spot-4 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle at center, #3a2a5a, #1a2f3d);
+    top: 20%;
+    right: 10%;
+    animation-delay: -15s;
+}
+
+/* Rename animation to avoid conflicts */
+@keyframes landingPageFloat {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+    25% {
+        transform: translate(80px, 80px) scale(1.2);
+    }
+    50% {
+        transform: translate(0, 120px) scale(0.8);
+    }
+    75% {
+        transform: translate(-80px, 80px) scale(1.2);
+    }
+}
+
+.landing-page .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+    padding: 0 20px;
+}
+
+.landing-page .hero-title {
+    font-size: 4.5rem;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+    font-weight: bold;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.landing-page .hero-subtext {
+    font-size: 1.8rem;
+    color: #809AD1;
+    margin-bottom: 2rem;
+    line-height: 1.4;
+    opacity: 0.9;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    font-family: 'Poppins', sans-serif;
+}
+
+.landing-page .cta-button {
+    width: 250px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    display: block;
+    margin: 0 auto;
+}
+
+.landing-page .cta-button:hover {
+    transform: scale(1.05);
+}
+
+.landing-page .shadow-1 {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.landing-page .scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.7;
+}
+
+.landing-page .scroll-text {
+    color: #ffffff;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.landing-page .scroll-arrow {
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    transform: rotate(45deg);
+    animation: landingPageScrollBounce 2s infinite;
+}
+
+/* Rename animation to avoid conflicts */
+@keyframes landingPageScrollBounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0) rotate(45deg);
+    }
+    40% {
+        transform: translateY(-10px) rotate(45deg);
+    }
+    60% {
+        transform: translateY(-5px) rotate(45deg);
+    }
+}
+
+.landing-page .stats {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0a0a0a;
+    overflow: hidden;
+}
+
+.landing-page .stats-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.landing-page .stats-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.landing-page .stats-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    gap: 2rem;
+    padding-top: 200px;
+    padding-bottom: 220px;
+}
+
+.landing-page .stat-text {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.landing-page .stat-text.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* First text (stat-text-1) */
+.landing-page .stat-text:nth-child(1) {
+    max-width: 800px;
+}
+
+/* Second text (stat-text-2) */
+.landing-page .stat-text:nth-child(2) {
+    max-width: 700px;
+    transition-delay: 0.2s;
+}
+
+/* Third text (stat-text-3) */
+.landing-page .stat-text:nth-child(3) {
+    max-width: 500px;
+    transition-delay: 0.4s;
+}
+
+.landing-page .glow-down {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.landing-page .features {
+    position: relative;
+    width: 100%;
+    min-height: 500vh;
+    overflow: hidden;
+}
+
+.landing-page .feature-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.landing-page .features-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.landing-page .features-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 4rem;
+    height: 100%;
+}
+
+/* Create more space between text and image for the third and fourth feature sections */
+.landing-page .feature-section:nth-child(3) .features-content,
+.landing-page .feature-section:nth-child(4) .features-content {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 6rem;
+}
+
+.landing-page .features-text {
+    flex: 1;
+    max-width: 500px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.landing-page .features-text.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.landing-page .features-text img {
+    width: 100%;
+    height: auto;
+    position: relative;
+    z-index: 2;
+}
+
+.landing-page .features-image {
+    flex: 1;
+    max-width: 600px;
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+}
+.landing-page .feature-text-1 {
+    transform: translateX(-15%); 
+}
+.landing-page .feature-image-1 {
+    right: 0;
+    top: 50%;
+    transform: translateY(10%) scale(1) translateX(10%);
+    transform-origin: right center;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    z-index: 2;
+}
+
+.landing-page .feature-image-2 {
+    left: 0;
+    top: 50%;
+    transform: translateY(10%) scale(1) translateX(-60%);
+    transform-origin: left center;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    z-index: 2;
+}
+
+.landing-page .feature-image-1.visible,
+.landing-page .feature-image-2.visible,
+.landing-page .feature-image-3.visible,
+.landing-page .feature-image-4.visible {
+    opacity: 1;
+}
+
+.landing-page .feature-text-2 {
+    transform: translateX(180%);
+}
+
+.landing-page .feature-text-4 {
+    transform: translateX(180%) scale(1.2);
+}
+
+.landing-page .feature-image-4 {
+    transform: translateX(-45%);
+}
+
+.landing-page .feature-text-3 {
+    transform: translateX(-20%);
+    scale: 0.9;
+}
+
+/* Remove the duplicate definitions that were causing issues */
+.landing-page .feature-image-3 {
+    transform: translateY(10%) scale(1) translateX(10%);
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    z-index: 2;
+}
+
+/* Remove these since we're back to original structure */
+.landing-page .feature-section:nth-child(3) .features-image,
+.landing-page .feature-section:nth-child(4) .features-image {
+    justify-content: flex-end;
+}
+
+.landing-page .feature-section:nth-child(3) .features-text,
+.landing-page .feature-section:nth-child(4) .features-text {
+    display: block;
+}
+
+/* Mobile responsiveness adjustment - simplify for consistency */
+@media (max-width: 768px) {
+    .landing-page .navbar {
+        padding: 1rem 20px;
+    }
+    
+    .landing-page .nav-left {
+        gap: 1rem;
+    }
+    
+    .landing-page .nav-logo img {
+        height: 40px;
+    }
+    
+    .landing-page .nav-links {
+        display: none;
+    }
+    
+    .landing-page .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .landing-page .hero-subtext {
+        font-size: 1rem;
+    }
+    
+    .landing-page .features-content {
+        flex-direction: column;
+        padding: 60px 20px;
+        gap: 2rem;
+    }
+    
+    .landing-page .features-text, 
+    .landing-page .features-image {
+        max-width: 100%;
+    }
+    
+    .landing-page .features-text img {
+        max-width: 90%;
+        margin: 0 auto;
+        display: block;
+    }
+    
+    .landing-page .features-image img {
+        max-width: 90%;
+        margin: 0 auto;
+        display: block;
+    }
+    
+    .landing-page .feature-text-1, 
+    .landing-page .feature-text-2, 
+    .landing-page .feature-text-3, 
+    .landing-page .feature-text-4 {
+        transform: translateX(0) scale(0.85);
+    }
+    
+    .landing-page .feature-image-1, 
+    .landing-page .feature-image-2, 
+    .landing-page .feature-image-3, 
+    .landing-page .feature-image-4 {
+        transform: translateX(0) translateY(0) scale(0.85);
+    }
+    
+    .landing-page .feature-section {
+        height: auto;
+        min-height: 100vh;
+        padding: 30px 0;
+    }
+    
+    .landing-page .feature-section:nth-child(3) .features-content,
+    .landing-page .feature-section:nth-child(4) .features-content {
+        flex-direction: column;
+    }
+    
+    .landing-page .feature-section:nth-child(3) .features-text,
+    .landing-page .feature-section:nth-child(4) .features-text {
+        display: block;
+        margin: 0 auto;
+    }
+}
+
+.landing-page .end-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.landing-page .end-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.landing-page .end-text {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    max-width: 800px;
+    width: 100%;
+    height: auto;
+}
+
+.landing-page .end-text.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.landing-page .end-text-1 {
+    transition-delay: 0.2s;
+    scale: 0.6;
+}
+
+.landing-page .end-text-2 {
+    transition-delay: 0.4s;
+    scale: 1.4;
+    cursor: pointer;
+    transition: transform 0.3s ease, scale 0.3s ease;
+}
+
+.landing-page .end-text-2:hover {
+    transform: scale(1.05);
+}
+
+.landing-page .end-text-3 {
+    transition-delay: 0.6s;
+    scale: 0.3;
+} 

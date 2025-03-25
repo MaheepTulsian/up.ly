@@ -25,6 +25,7 @@ const Topbar = () => {
           <TabsTrigger value="Cover Letter"><Link to={`${basePath}/cover-letter`}>Cover Letter</Link></TabsTrigger>
           <TabsTrigger value="Resources"><Link to={`${basePath}/resources`}>Resources</Link></TabsTrigger>
           <TabsTrigger value="Interview Prep"><Link to={`${basePath}/interview`}>Interview Prep</Link></TabsTrigger>
+          <TabsTrigger value="Job Search"><Link to={`${basePath}/job-search`}>Job Search</Link></TabsTrigger>
           <TabsTrigger value="Extension"><Link to={`${basePath}/extension`}>Extension</Link></TabsTrigger>
         </TabsList>
       </Tabs>

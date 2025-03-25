@@ -12,6 +12,7 @@ import HomePage from './pages/HomePage';
 import CoverLetterPage from './pages/CoverLetterPage';
 import InterviewPage from './pages/InterviewPage';
 import ExtensionPage from './pages/ExtensionPage';
+import ScraperPage from './pages/ScraperPage';
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
             <Route path="resources" element={<ResourcesPage />} />
             <Route path="interview" element={<InterviewPage />} />
             <Route path="extension" element={<ExtensionPage />} />
+            <Route path="job-search" element={<ScraperPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

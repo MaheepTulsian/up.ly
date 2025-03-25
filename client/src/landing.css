@@ -1,0 +1,370 @@
+/* Landing Page Styles */
+
+/* General styles */
+.App {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+  min-height: 100vh;
+  color: white;
+}
+
+/* Custom cursor styles */
+.cursor-dot {
+  position: fixed;
+  pointer-events: none;
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  z-index: 9999;
+}
+
+.cursor-ring {
+  position: fixed;
+  pointer-events: none;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  z-index: 9998;
+}
+
+/* Navbar styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-logo img {
+  height: 40px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+.nav-links a:hover {
+  opacity: 1;
+}
+
+.nav-right img {
+  cursor: pointer;
+  height: 40px;
+}
+
+/* Hero section styles */
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(to bottom, #111827, #1f2937);
+}
+
+.nebula-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.nebula-spot {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.4;
+}
+
+.spot-1 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #4f46e5, transparent);
+  top: 20%;
+  left: 10%;
+}
+
+.spot-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #7c3aed, transparent);
+  bottom: 30%;
+  right: 5%;
+}
+
+.spot-3 {
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, #2563eb, transparent);
+  top: 40%;
+  right: 30%;
+}
+
+.spot-4 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, #3b82f6, transparent);
+  bottom: 10%;
+  left: 20%;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+}
+
+.hero-title {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(to right, #fff, #a5b4fc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-subtext {
+  font-size: 1.25rem;
+  opacity: 0.8;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.cta-button {
+  cursor: pointer;
+  height: 60px;
+  transition: transform 0.3s;
+}
+
+.cta-button:hover {
+  transform: scale(1.05);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.6;
+}
+
+.scroll-text {
+  font-size: 0.875rem;
+  letter-spacing: 1px;
+}
+
+.scroll-arrow {
+  width: 20px;
+  height: 20px;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(45deg);
+  animation: scroll-bounce 2s infinite;
+}
+
+@keyframes scroll-bounce {
+  0%, 100% {
+    transform: rotate(45deg) translate(0, 0);
+  }
+  50% {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+}
+
+/* Stats section styles */
+.stats {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0f172a;
+}
+
+.stats-background img {
+  width: 100%;
+  height: auto;
+}
+
+.stats-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding: 2rem;
+}
+
+.stat-text {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s, transform 0.6s;
+}
+
+.stat-text.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Features section styles */
+.features {
+  background-color: #0f172a;
+}
+
+.feature-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.features-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.features-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5%;
+  width: 100%;
+  max-width: 1400px;
+}
+
+.features-text, .features-image {
+  width: 45%;
+}
+
+.feature-text-1, .feature-image-1 {
+  width: 100%;
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.8s, transform 0.8s;
+}
+
+.feature-text-1.visible, .feature-image-1.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Feature section alternating layout */
+.feature-section:nth-child(even) .features-content {
+  flex-direction: row-reverse;
+}
+
+/* Feature section with dark background needs lighter text */
+.feature-section:nth-child(3) .features-text {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* End section styles */
+.end-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.end-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.end-text {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s, transform 0.8s;
+}
+
+.end-text.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.end-text-2 {
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.end-text-2:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .features-content {
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  .features-text, .features-image {
+    width: 80%;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 3rem;
+  }
+
+  .nav-links {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .features-text, .features-image {
+    width: 90%;
+  }
+} 
