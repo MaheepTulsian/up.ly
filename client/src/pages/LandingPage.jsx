@@ -1,12 +1,26 @@
 import React from 'react'
-import Layout from './Layout'
+import { Separator } from '../components/ui/separator'
+import Navbar from '../components/LandingPageComponents/Navbar'
+import CTA from '../components/LandingPageComponents/CTA'
+import HeroSection from '../components/LandingPageComponents/HeroSection'
+import Features from '../components/LandingPageComponents/Features'
+import FAQ from '../components/LandingPageComponents/FAQ'
+import Footer from '../components/LandingPageComponents/Footer'
 
-function Landing() {
+const LandingPage = () => {
   return (
-    <div>
-      <Layout />
+    <div className='w-full'>
+      <Navbar />
+      <HeroSection />
+      <CTA />
+      <Features />
+      <FAQ />
+      <div className='py-2 px-4 md:px-8'>
+        <Separator />
+      </div>
+      <Footer />
     </div>
   )
 }
 
-export default Landing
+export default LandingPage

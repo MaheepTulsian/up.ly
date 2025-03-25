@@ -1,39 +1,29 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from './components/ThemeProvider';
 import LandingPage from './pages/LandingPage';
 import NotFound from './pages/NotFound';
+import Auth from './pages/AuthPage';
 import Dashboard from './pages/Dashboard';
-import Auth from './pages/Auth';
-import Layout from './pages/Layout';
-import { Navigate } from 'react-router-dom';
-import Resume from './pages/Resume';
-import MockInterview from './pages/MockInterview';
+import ProfilePage from './pages/ProfilePage';
 
-function App() {
+const App = () => {
   return (
-    <Router>
-      <Routes>
-        {/* Route for the Landing page */}
-        <Route path="/" element={<LandingPage />} />
-        
-        {/* Catch-all route for 404 */}
-        <Route path="*" element={<NotFound />} />
-        
-        {/* Authentication route */}
-        <Route path="/auth" element={<Auth />} />
-
-        {/* Dashboard route wrapped inside Layout */}
-        <Route path="/user" element={<Layout />}>
-          <Route index element={<Navigate to="dashboard" />} /> {/* Redirect to dashboard by default */}
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="resume-tailoring" element={<Resume/>} />
-          <Route path="mock-interview" element={<MockInterview />} />
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
-    </Router>
+          <Route path="/auth" element={<Auth />} />
+
+          <Route path="/:id/dashboard/" element={<Dashboard />} >
+            <Route path="profile" element={<ProfilePage />} />
+          
+          </Route>
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
-
