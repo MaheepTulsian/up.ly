@@ -8,7 +8,7 @@ import profileRoutes from "./routes/profile_route.js";
 
 dotenv.config();
 const app = express();
-const Port = 8000;
+const Port = 3000;
 
 // CORS middleware
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));

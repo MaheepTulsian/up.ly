@@ -18,11 +18,9 @@ const Topbar = () => {
       <Tabs defaultValue="Home">
         <TabsList>
           <TabsTrigger value="Home"><Link to="./">Home</Link></TabsTrigger>
-          <TabsTrigger value="Resume">Resume</TabsTrigger>
-          <TabsTrigger value="Cover Letter">Cover Letter</TabsTrigger>
-          <TabsTrigger value="Resources">Resources</TabsTrigger>
-          <TabsTrigger value="Interview Prep">Interview Prep</TabsTrigger>
-          <TabsTrigger value="Extension">Extension</TabsTrigger>
+          <TabsTrigger value="Resume"><Link to="./resume">Resume</Link></TabsTrigger>
+          <TabsTrigger value="Resources"><Link to="./resources">Resources</Link></TabsTrigger>
+          <TabsTrigger value="Extension"><Link to="extension">Extension</Link></TabsTrigger>
         </TabsList>
       </Tabs>
 

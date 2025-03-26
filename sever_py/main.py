@@ -15,10 +15,10 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Allow all origins
+    allow_origins=["http://localhost:5173"],  # Add your frontend IP
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -46,12 +46,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Create the FastAPI app
-app = FastAPI(
-    title="Candidate Evaluation API",
-    description="API for generating interview questions and evaluating candidate answers",
-    version="1.0.0"
-)
+
 
 # Include the candidate router
 app.include_router(candidate_router)

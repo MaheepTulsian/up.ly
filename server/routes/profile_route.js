@@ -102,9 +102,9 @@ router.post("/:userId/academics", async (req, res) => {
         // Push academic details into profile
         const updatedProfile = await Profile.findByIdAndUpdate(
             userId,
-            { $addToSet: { academic: { $each: academics } } }, // Append multiple entries
+            { $set: { academic: academics } }, // Completely replaces the array
             { new: true, runValidators: true }
-        );
+        );        
 
         if (!updatedProfile) {
             return res.status(404).json({ error: "User not found." });
@@ -154,9 +154,9 @@ router.post("/:userId/projects", async (req, res) => {
         // Push project details into profile
         const updatedProfile = await Profile.findByIdAndUpdate(
             userId,
-            { $addToSet: { projects: { $each: projects } } }, // Append multiple projects
+            { $set: { projects: projects } }, // Replace the existing array with the new one
             { new: true, runValidators: true }
-        );
+        );        
 
         if (!updatedProfile) {
             return res.status(404).json({ error: "User not found." });
@@ -233,9 +233,9 @@ router.post("/:userId/work-experience", async (req, res) => {
         // Update work experience in the profile
         const updatedProfile = await Profile.findByIdAndUpdate(
             userId,
-            { $addToSet: { workEx: { $each: workExperience } } }, // Adds new entries instead of replacing
+            { $set: { workEx: workExperience } }, // Completely replaces the array
             { new: true, runValidators: true }
-        );
+        );        
         
 
         if (!updatedProfile) {
@@ -272,9 +272,9 @@ router.post("/:userId/certifications", async (req, res) => {
         // Update user's certifications
         const updatedProfile = await Profile.findByIdAndUpdate(
             userId,
-            { $addToSet: { certifications } }, // Replaces all certifications
+            { $set: { certifications: certifications } }, // Replaces the entire array
             { new: true, runValidators: true }
-        );
+        );        
 
         if (!updatedProfile) {
             return res.status(404).json({ error: "User not found." });
@@ -310,9 +310,9 @@ router.post("/:userId/achievements", async (req, res) => {
         // Update user's achievements
         const updatedProfile = await Profile.findByIdAndUpdate(
             userId,
-            { $addToSet: { achievements } }, // Overwrites all achievements
+            { $set: { achievements: achievements } }, // Completely replaces the array
             { new: true, runValidators: true }
-        );
+        );        
 
         if (!updatedProfile) {
             return res.status(404).json({ error: "User not found." });
@@ -348,9 +348,9 @@ router.post("/:userId/publications", async (req, res) => {
         // Update user's publications
         const updatedProfile = await Profile.findByIdAndUpdate(
             userId,
-            { $addToSet: { publications } }, // Overwrites all publications
+            { $set: { publications: publications } }, // Completely replaces the array
             { new: true, runValidators: true }
-        );
+        );        
 
         if (!updatedProfile) {
             return res.status(404).json({ error: "User not found." });
@@ -401,7 +401,7 @@ router.post("/:userId/socials", async (req, res) => {
     }
 });
 
-router.get("/:userId/profile", async (req, res) => {
+router.get("/:userId/getprofile", async (req, res) => {
     try {
         const { userId } = req.params;
 

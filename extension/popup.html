@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Assistant</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      width: 300px;
+      padding: 15px;
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .btn {
+      background-color: #4285f4;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    
+    .btn:hover {
+      background-color: #3367d6;
+    }
+    
+    .btn:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    .status {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      display: none;
+    }
+    
+    .success {
+      background-color: #e6f4ea;
+      color: #137333;
+      display: block;
+    }
+    
+    .error {
+      background-color: #fce8e6;
+      color: #c5221f;
+      display: block;
+    }
+    
+    h1 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #202124;
+    }
+    
+    .form-data {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #dadce0;
+      padding: 10px;
+      border-radius: 4px;
+      margin-top: 10px;
+      font-size: 12px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Form Assistant</h1>
+    
+    <button id="extractBtn" class="btn">Extract All Form Fields</button>
+    <button id="extractCurrentBtn" class="btn">Extract Current Field</button>
+    <button id="autofillBtn" class="btn">Autofill Form</button>
+    
+    <div id="status" class="status"></div>
+    <pre id="formData" class="form-data"></pre>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html> 
