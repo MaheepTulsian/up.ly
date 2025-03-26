@@ -23,12 +23,12 @@ router = APIRouter(
 # Pydantic models
 class ResumeCreateRequest(BaseModel):
     user_profile: Dict[str, Any]
-    resume_template: Dict[str, Any]
+    # resume_template: Dict[str, Any]
     job_description: str
 
 class ResumeUpdateRequest(BaseModel):
     previous_resume: Dict[str, Any]
-    resume_template: Dict[str, Any]
+    # resume_template: Dict[str, Any]
     job_description: str
     user_query: str
 
@@ -40,7 +40,7 @@ def get_llm(model=None):
     """Get the language model based on provider."""
     return ChatGroq(
         model=model or "llama-3.3-70b-versatile",
-        temperature=0.2,
+        temperature=0.7,
         max_retries=2
     )
 
@@ -54,11 +54,34 @@ GUIDELINES:
 5. Follow the exact structure of the provided template.
 6. Format the final output as valid JSON that matches the template structure.
 7. Be concise, professional, and honest - do not invent information not present in the user's profile.
+
+SKILLS EXTRACTION (CRITICAL):
+- Extract ALL skills mentioned in the user profile
+- Include both technical and soft skills
+- Add relevant skills implied by the user's work experience
+- Match skills with those mentioned in the job description
+- The skills array MUST NOT be empty
+- Format skills as an array of strings, e.g., ["JavaScript", "Python", "Leadership"]
+
+PROCESS:
+1. Analyze the job requirements to identify key skills and qualifications
+2. Match the user's profile with the job requirements
+3. Create a tailored resume that highlights relevant experiences
+4. Format the resume according to the provided template
+5. Return the result as a valid JSON object
+
+Remember, the goal is to create a resume that will help the user stand out while accurately representing their qualifications for the specific job they're applying to.
+
+IMPORTANT: The skills array is CRITICAL for the user to get the job. You MUST populate it with all relevant skills from the user profile and job description.
 """
+
 
 UPDATE_SYSTEM_PROMPT = """You are an expert resume updater designed to improve existing resumes based on job descriptions and user queries. Your task is to analyze job descriptions, compare them with the existing resume, and update the resume to better match the job requirements.
 
 GUIDELINES:
+Note : In the output format along with the json output also  act as chatbot and give some response to the user query.
+the ouput format should be like this resume json  + chatbot response
+remember the response shoud be of json response plus  chapbot type response for user quesry only .
 1. Carefully analyze the job description to identify key requirements, skills, and qualifications.
 2. Review the existing resume to understand the user's experience, skills, education, and achievements.
 3. Update the resume to highlight experiences and skills most relevant to the job description.
@@ -66,6 +89,7 @@ GUIDELINES:
 5. Follow the exact structure of the provided template.
 6. Format the final output as valid JSON that matches the template structure.
 7. Be concise, professional, and honest - do not invent information not present in the existing resume.
+
 """
 
 def extract_json_from_text(text: str) -> Dict[str, Any]:
@@ -99,6 +123,7 @@ def extract_json_from_text(text: str) -> Dict[str, Any]:
             # If all parsing fails, return empty dict
             return {}
 
+
 def validate_json_structure(json_data: Dict[str, Any], template: Dict[str, Any]) -> Dict[str, Any]:
     """Validate and fix JSON structure against the template."""
     result = {}
@@ -111,13 +136,22 @@ def validate_json_structure(json_data: Dict[str, Any], template: Dict[str, Any])
         elif isinstance(value, list) and isinstance(json_data[key], list):
             # Handle list values
             result[key] = []
+            
+            # Special handling for skills array
+            if key == "skills" and json_data[key]:
+                result[key] = json_data[key]
+                continue
+                
             for item in json_data[key]:
-                if isinstance(item, dict):
+                if isinstance(item, dict) and len(value) > 0 and isinstance(value[0], dict):
                     # Validate each item against the template item
-                    template_item = value[0] if len(value) > 0 else {}
+                    template_item = value[0]
                     valid_item = {k: item.get(k, v) for k, v in template_item.items()}
                     if any(v for v in valid_item.values()):  # Only add non-empty items
                         result[key].append(valid_item)
+                else:
+                    # For non-dict items in lists (like skills)
+                    result[key].append(item)
         elif isinstance(value, dict) and isinstance(json_data[key], dict):
             # Handle nested dictionaries
             result[key] = {k: json_data[key].get(k, v) for k, v in value.items()}
@@ -126,6 +160,7 @@ def validate_json_structure(json_data: Dict[str, Any], template: Dict[str, Any])
             result[key] = json_data[key]
             
     return result
+
 
 # API endpoints
 @router.post("/create", response_model=ResumeResponse)
@@ -137,7 +172,68 @@ async def create_resume(request: ResumeCreateRequest):
         # Convert request data to strings for the prompt
         job_description = request.job_description
         user_profile_str = json.dumps(request.user_profile, indent=2)
-        template_str = json.dumps(request.resume_template, indent=2)
+        resume_template = {
+    "basics": {
+        "firstName": "",
+        "lastName": "",
+        "email": "",
+        "phone": "",
+        "address": {
+            "city": "",
+            "state": ""
+        },
+        "socials": {
+            "linkedIn": "",
+            "github": ""
+        }
+    },
+    "workExperience": [
+        {
+            "position": "",
+            "company": "",
+            "startDate": "",
+            "endDate": "",
+            "isCurrent": False,
+            "description": ""
+        }
+    ],
+    "projects": [
+        {
+            "title": "",
+            "startDate": "",
+            "endDate": "",
+            "description": "",
+            "technologiesUsed": []
+        }
+    ],
+    "education": [
+        {
+            "institution": "",
+            "degree": "",
+            "fieldOfStudy": "",
+            "startDate": "",
+            "endDate": ""
+        }
+    ],
+    "achievements": [
+        {
+            "title": "",
+            "issuer": "",
+            "date": "",
+            "description": ""
+        }
+    ],
+    "skills": [],
+    "certifications": [
+        {
+            "name": "",
+            "issuingOrganization": "",
+            "issueDate": ""
+        }
+    ]
+}
+
+        template_str = json.dumps(resume_template, indent=2)
         
         # Create messages for the LLM
         messages = [
@@ -167,7 +263,7 @@ async def create_resume(request: ResumeCreateRequest):
             raise HTTPException(status_code=500, detail="Failed to generate valid resume JSON")
         
         # Validate against template
-        validated_resume = validate_json_structure(resume_json, request.resume_template)
+        validated_resume = validate_json_structure(resume_json, resume_template)
         
         return JSONResponse(content=jsonable_encoder({"resume": validated_resume}))
     
@@ -183,7 +279,67 @@ async def update_resume(request: ResumeUpdateRequest):
         # Convert request data to strings for the prompt
         job_description = request.job_description
         previous_resume_str = json.dumps(request.previous_resume, indent=2)
-        template_str = json.dumps(request.resume_template, indent=2)
+        resume_template = {
+    "basics": {
+        "firstName": "",
+        "lastName": "",
+        "email": "",
+        "phone": "",
+        "address": {
+            "city": "",
+            "state": ""
+        },
+        "socials": {
+            "linkedIn": "",
+            "github": ""
+        }
+    },
+    "workExperience": [
+        {
+            "position": "",
+            "company": "",
+            "startDate": "",
+            "endDate": "",
+            "isCurrent": False,
+            "description": ""
+        }
+    ],
+    "projects": [
+        {
+            "title": "",
+            "startDate": "",
+            "endDate": "",
+            "description": "",
+            "technologiesUsed": []
+        }
+    ],
+    "education": [
+        {
+            "institution": "",
+            "degree": "",
+            "fieldOfStudy": "",
+            "startDate": "",
+            "endDate": ""
+        }
+    ],
+    "achievements": [
+        {
+            "title": "",
+            "issuer": "",
+            "date": "",
+            "description": ""
+        }
+    ],
+    "skills": [],
+    "certifications": [
+        {
+            "name": "",
+            "issuingOrganization": "",
+            "issueDate": ""
+        }
+    ]
+}
+        template_str = json.dumps(resume_template, indent=2)
         user_query = request.user_query
         
         # Create messages for the LLM
@@ -217,7 +373,7 @@ async def update_resume(request: ResumeUpdateRequest):
             raise HTTPException(status_code=500, detail="Failed to generate valid updated resume JSON")
         
         # Validate against template
-        validated_resume = validate_json_structure(updated_resume_json, request.resume_template)
+        validated_resume = validate_json_structure(updated_resume_json, resume_template)
         
         return JSONResponse(content=jsonable_encoder({"resume": validated_resume}))
     
