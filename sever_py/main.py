@@ -4,6 +4,21 @@ import uvicorn
 from pydantic import BaseModel
 from web_agent import InterviewState, workflow, check_output_and_answer, filter_requests_on_user_query
 import json
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI(
+    title="Candidate Evaluation API",
+    description="API for generating interview questions and evaluating candidate answers",
+    version="1.0.0"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # Allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
 
 # Import the router
 from routers.mock_interview_routes import router as candidate_router
