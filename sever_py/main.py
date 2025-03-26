@@ -1,7 +1,7 @@
 import logging
 from fastapi import FastAPI, HTTPException
 import uvicorn
-<<<<<<< HEAD
+
 from pydantic import BaseModel
 from web_agent import InterviewState, workflow, check_output_and_answer, filter_requests_on_user_query
 import json
@@ -20,14 +20,14 @@ app.add_middleware(
     allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
     allow_headers=["*"],  # Allow all headers
 )
-=======
->>>>>>> upstream/main
+
+
 
 # Import the router
 from routers.mock_interview_routes import router as candidate_router
 from routers.resume_routers import router as resume_router
 
-<<<<<<< HEAD
+
 class InterviewRequest(BaseModel):
     company_name: str
     job_role: str
@@ -39,9 +39,7 @@ class QuestionRequest(BaseModel):
     web_question: dict
     user_query: str
 
-=======
->>>>>>> upstream/main
-# Configure logging
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -64,7 +62,6 @@ app.include_router(resume_router)
 async def root():
     return {"status": "online", "message": "Candidate Evaluation API is running"}
 
-<<<<<<< HEAD
 @app.post("/generate_interview_questions")
 async def generate_interview_questions(request: InterviewRequest):
     try:
@@ -112,8 +109,4 @@ async def modify_interview_questions(request: QuestionRequest):
 # Run the application if executed directly
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=7070)
-=======
-# Run the application if executed directly
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=9990, reload=True)
->>>>>>> upstream/main
+
